@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-    boardSize := 9
+    const boardSize int = 9
     board := initializeBoard(boardSize)
     printBoard(board, boardSize)
 }
