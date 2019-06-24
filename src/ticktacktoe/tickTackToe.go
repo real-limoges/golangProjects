@@ -13,39 +13,43 @@ func main() {
     board := initializeBoard(boardSize)
     printBoard(board, boardSize)
 
+    var continueGame bool = true
+    var piece string = "X"
     turn := 0
-
-    for {
-        fmt.Println("Enter X Coordinate for Piece")
-        fmt.Println("Please Enter X Coordinate")
-        x := receiveInput(boardSize)
-        fmt.Println("Please Enter Y Coordinate")
-        y := receiveInput(boardSize)
-
-        var piece string
-        if turn % 2 == 0  {
-            piece = "X"
-        } else {
-            piece = "O"
-        }
-
-        valid := placePiece(board, piece, x, y)
-
-        if valid {
-            board[x][y] = piece
-            victory := checkVictory(board, boardSize, piece)
-            if victory {
-                fmt.Println("Congrats Piece ", piece)
+    for continueGame {
+        var invalid bool = true
+        for invalid {
+            if turn % 2 == 0 {
+                piece = "X"
+            } else {
+                piece = "O"
             }
-            turn += 1
-            break
+            fmt.Println("Enter X Coordinate for ", piece)
+            fmt.Println("Please Enter X Coordinate")
+            x := receiveInput(boardSize)
+            fmt.Println("Please Enter Y Coordinate")
+            y := receiveInput(boardSize)
+
+            valid := placePiece(board, piece, x, y)
+
+            if valid {
+                board[x][y] = piece
+                invalid = false
+            }
+        }
+        turn += 1
+        printBoard(board, boardSize)
+        victory := checkVictory(board, boardSize, piece)
+        if victory {
+            fmt.Println("Congrats ", piece, " on your victory")
+            continueGame = false
+        }
+        tie := checkTie(board, boardSize)
+        if tie && !victory {
+            fmt.Println("Tie Game. Bummer")
+            continueGame = false
         }
     }
-    tie := checkTie(board, boardSize)
-    if tie {
-        fmt.Println("Tie Game. Bummer")
-    }
-    printBoard(board, boardSize)
 }
 
 func initializeBoard(boardSize int) ([][]string){
